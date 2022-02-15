@@ -117,13 +117,7 @@ for data in test_dataloader:
 #num = num.cpu().detach().numpy()
 
 if latent_dim == 2:
-    plt.figure(figsize=(15, 15))
-    plt.scatter(train_z[1:, 0], train_z[1:, 1], marker='.',  c = "black")
-    plt.scatter(val_z[1:, 0], val_z[1:, 1], marker='.',  c = "blue")
-    plt.scatter(test_z[1:, 0], test_z[1:, 1], marker='.',  c = "red")
-    plt.grid()
-    plt.savefig("./fig.png")
+    v_latent(train_z, val_z,test_z)
 if train == True:
     torch.save(model.state_dict(), './conv_Variational_autoencoder_{}dim.pth'.format(latent_dim))
-
 v_loss(train_losses, val_losses)
