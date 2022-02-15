@@ -13,7 +13,7 @@ import numpy as np
 import fasttext
 
 from vae import VAE
-from visualization import v_loss, v_latent
+from visualization import v_loss, v_latent, v_masquerade
 
 #-------------------------#
 #     main parameters     #
@@ -24,6 +24,7 @@ batch_size = 16  #batch size
 learning_rate = 1e-5 
 train =True
 latent_dim = 2
+user_id = 2
 
 #-------------------------#
 #    learning word2vec    #
@@ -33,7 +34,7 @@ w2v_model = fasttext.train_unsupervised("train.txt", "skipgram", dim=64, minCoun
 #------------------------------------#
 #      learing features of User2     #
 #------------------------------------#
-with open("masquerade-data/User2") as f:
+with open("masquerade-data/User"+ str(user_id)) as f:
     cmds=[l.rstrip() for l in f.readlines()]
 
 x=[w2v_model[cmd] for cmd in cmds]
@@ -116,8 +117,12 @@ for data in test_dataloader:
 #z = latent.cpu().detach().numpy()
 #num = num.cpu().detach().numpy()
 
+#-----------------------------#
+#  visualize trained results  #
+#-----------------------------#
 if latent_dim == 2:
     v_latent(train_z, val_z,test_z)
 if train == True:
     torch.save(model.state_dict(), './conv_Variational_autoencoder_{}dim.pth'.format(latent_dim))
 v_loss(train_losses, val_losses)
+v_masquerade(user_id = user_id, test_each_loss = test_each_loss)

@@ -1,5 +1,6 @@
 
 import matplotlib.pyplot as plt
+import numpy as np
 
 def v_loss(train_losses, val_losses):
     plt.plot(train_losses[:150], label="train loss")
@@ -18,4 +19,19 @@ def v_latent(train_z, val_z, test_z):
     plt.grid()
     plt.legend(loc="upper right")
     plt.savefig("2d_latent.png")
+    plt.show()
+
+def v_masquerade(user_id, test_each_loss):
+    label = []
+    with open("label.txt") as f:
+        for _ in range(100):
+            label.append(list(map(int, f.readline().split())))
+    f.close()
+    label = np.array(label).T
+    pos_mas = np.where(label[user_id-1])[0]
+
+    plt.plot(test_each_loss, label="test loss")
+    plt.scatter(pos_mas, np.array(test_each_loss)[pos_mas], c = "orange", label = "masquerade")
+    plt.legend()
+    plt.savefig("User"+str(user_id) + "_loss_masquerade_position.png")
     plt.show()
