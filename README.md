@@ -31,6 +31,9 @@ http://schonlau.net/
 for f in masquerade-data/*;do head -n 5000 $f|perl -pe 's/\n/ /g'|perl -pe 's/$/\n/'>> train.txt; done
 ```
 
-# License
- 
-"anomaly-detection" is under [MIT license](https://en.wikipedia.org/wiki/MIT_License).
+ ## Licence
+
+[MIT](https://github.com/tcnksm/tool/blob/master/LICENCE)
+
+## Author
+* [Reo-I](https://github.com/Reo-I) (Graduate School of Frontier Science, Univeristy of Tokyo)
