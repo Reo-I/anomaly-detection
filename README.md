@@ -32,7 +32,10 @@ for f in masquerade-data/*;do head -n 5000 $f|perl -pe 's/\n/ /g'|perl -pe 's/$/
 ```
 
 # Results
+The greater the loss, the more suspected the session was of being attacked. From the following result, the VAE can detect masqueraded sessions.
+
 ![Test Image 1](images/User2_loss_masquerade_position_4000.png)
+
 
  # Licence
 
