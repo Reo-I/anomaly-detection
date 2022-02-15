@@ -25,6 +25,7 @@ learning_rate = 1e-5
 train =True
 latent_dim = 2
 user_id = 2
+train_size = 4000 #defalt:4000
 
 #-------------------------#
 #    learning word2vec    #
@@ -38,7 +39,7 @@ with open("masquerade-data/User"+ str(user_id)) as f:
     cmds=[l.rstrip() for l in f.readlines()]
 
 x=[w2v_model[cmd] for cmd in cmds]
-x_train=np.reshape(np.array(x[:4000]),(40,1, 100,64))
+x_train=np.reshape(np.array(x[:train_size]),(int(train_size/100),1, 100,64))
 x_valid=np.reshape(np.array(x[4000:5000]),(10,1, 100,64))
 x_test=np.reshape(np.array(x[5000:]),(-1,1, 100,64))
 
@@ -125,4 +126,4 @@ if latent_dim == 2:
 if train == True:
     torch.save(model.state_dict(), './conv_Variational_autoencoder_{}dim.pth'.format(latent_dim))
 v_loss(train_losses, val_losses)
-v_masquerade(user_id = user_id, test_each_loss = test_each_loss)
+v_masquerade(user_id = user_id, test_each_loss = test_each_loss, train_size = train_size)
