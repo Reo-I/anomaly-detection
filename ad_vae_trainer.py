@@ -96,9 +96,9 @@ for epoch in range(num_epochs):
 #-------------------------------------------------#
 #  validate trained vae for train/val/test data   #
 #-------------------------------------------------#
-train_z = np.array([[0, 0]])
-val_z = np.array([[0, 0]])
-test_z = np.array([[0, 0]])
+train_z = np.array([[0] * latent_dim])
+val_z = np.array([[0]*latent_dim])
+test_z = np.array([[0] * latent_dim])
 test_each_loss = []
 model.eval()
 for data in train_dataloader:
