@@ -31,7 +31,7 @@ class VAE(nn.Module):
             nn.Linear(13312,latent_dim),# b, 64 ==> b, latent_dim
             )
         self.decoder = nn.Sequential(
-            nn.Linear(latent_dim,13312),# b, latent_dim ==> b, 512
+            nn.Linear(latent_dim,13312),# b, latent_dim ==> b, 13312
             nn.BatchNorm1d(13312),
             nn.ReLU(),
             )
@@ -69,7 +69,7 @@ class VAE(nn.Module):
         mean = self.mean(x)
         var = self.var(x)
         return mean,var
-    
+    #Decoder
     def _decoder(self, z):
         z = self.decoder(z)
         z = z.view(-1,128,13,8)
@@ -79,23 +79,21 @@ class VAE(nn.Module):
         return x
     
     def forward(self, x):
-        # xは元画像　
-        mean,var = self._encoder(x) #Decoderの出力はlog σ^2を想定
+        mean,var = self._encoder(x) #mean and log_variance
         z = self._sample_z(mean, var) 
-        #print("z:", z.size())
         x = self._decoder(z)
         return x,mean,var,z
     
     def loss(self, x):
-      mean, var = self._encoder(x) #Decoderの出力はlog σ^2を想定
+      mean, var = self._encoder(x) #\sigma^2
       
-      KL = 0.5 * torch.mean(1 + var- mean**2 - torch.exp(var)) #KLダイバージェンス
+      KL = 0.5 * torch.mean(1 + var- mean**2 - torch.exp(var)) #KLDivvergence
       
       z = self._sample_z(mean, var) 
       y = self._decoder(z) 
       delta = 1e-7 
 
-      reconstruction = torch.mean(x * torch.log(y+delta) + (1 - x) * torch.log(1 - y +delta)) #再構成誤差
+      reconstruction = torch.mean(x * torch.log(y+delta) + (1 - x) * torch.log(1 - y +delta)) #reconstruction loss
       lower_bound = [KL, reconstruction]   
 
       return -sum(lower_bound) ,y,mean,var,z
